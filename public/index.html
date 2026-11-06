@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#14160f" />
+    <title>画面の答え</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <video id="video" playsinline autoplay muted></video>
+    <canvas id="snap" hidden></canvas>
+
+    <div id="gate" class="gate">
+      <p class="eyebrow">カメラで読む</p>
+      <h1>画面の答え</h1>
+      <p class="lead">
+        パソコンの画面をスマホのカメラに映してください。開始直後に1回読み、その後は10秒ごとに答えを声で言います。指でつまむとズームできます。
+      </p>
+      <button id="start" class="primary" type="button">カメラを開始</button>
+      <p id="phone-urls" class="hint"></p>
+      <p id="gate-error" class="hint is-bad"></p>
+      <button id="open-settings" class="text" type="button">設定</button>
+    </div>
+
+    <header class="top">
+      <div>
+        <p class="eyebrow">画面の答え</p>
+        <p id="status" aria-live="polite">待機しています</p>
+      </div>
+      <button id="settings-btn" class="ghost" type="button">設定</button>
+    </header>
+
+    <div class="meter" aria-hidden="true">
+      <span id="meter-bar"></span>
+    </div>
+    <p id="meter-label" class="meter-label"></p>
+
+    <section class="sheet">
+      <div class="zoom">
+        <button id="zoom-out" type="button" aria-label="縮小">−</button>
+        <input id="zoom" type="range" min="1" max="4" step="0.1" value="1" aria-label="ズーム" />
+        <button id="zoom-in" type="button" aria-label="拡大">＋</button>
+        <span id="zoom-label">1.0倍</span>
+      </div>
+      <p id="summary" class="summary"></p>
+      <p id="answer" class="answer">10秒ごとに画面を読みます</p>
+      <ol id="history" class="history"></ol>
+      <div class="row">
+        <button id="once" class="primary" type="button">今の画面を読む</button>
+        <button id="flip" class="ghost" type="button">カメラ切替</button>
+        <button id="stop" class="ghost" type="button">停止</button>
+      </div>
+    </section>
+
+    <dialog id="settings">
+      <form method="dialog" id="settings-form">
+        <h2>設定</h2>
+        <label>
+          OpenAI APIキー
+          <input id="api-key" type="password" autocomplete="off" placeholder="sk-..." />
+        </label>
+        <p id="key-state" class="hint"></p>
+        <button id="save-key" class="primary" type="button">キーを保存</button>
+
+        <label>
+          モデル
+          <select id="model">
+            <option value="gpt-4o">gpt-4o（日本語の読み取り向け）</option>
+            <option value="gpt-4o-mini">gpt-4o-mini（軽い）</option>
+            <option value="gpt-4.1">gpt-4.1</option>
+            <option value="gpt-4.1-mini">gpt-4.1-mini</option>
+          </select>
+        </label>
+
+        <label>
+          話す速さ
+          <input id="rate" type="range" min="80" max="130" value="105" />
+        </label>
+
+        <label class="check">
+          <input id="auto" type="checkbox" checked />
+          10秒ごとに自動で読む
+        </label>
+        <p class="hint">カメラ開始の直後に1回読み、その後は10秒ごとに読みます。同じ答えは繰り返して言いません。</p>
+
+        <label>
+          画像で試す
+          <input id="file" type="file" accept="image/*" />
+        </label>
+
+        <div class="row">
+          <button id="close-settings" class="ghost" type="button">閉じる</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
